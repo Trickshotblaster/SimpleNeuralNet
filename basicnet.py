@@ -126,7 +126,11 @@ x_test = x_test.reshape(x_test.shape[0], -1)
 # Create and train a neural network
 layer_sizes = [1, 1]
 nn = CustomNeuralNetwork(layer_sizes)
-# if neural net loading doesn't work, remove this
+# if neural net loading doesn't work, remove this (you need a text file in your project to store the weights and biases)
+try:
+    nn.load_from_file("nn_weights_biases.txt") #rename to whatever your text file is
+except:
+    print("network could not be read from file")
 
 nn.train(x_train, y_train, batch_size=10, learning_rate=0.01, epochs=100)
 
