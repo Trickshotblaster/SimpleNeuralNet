@@ -4,4 +4,6 @@ A simple neural network model with backpropagation. There is a file for recogniz
 # Use
 Feel free to try it out yourself! The code for the handwritten digits was made in pycharm, so it has not been tested with other editors, but the code should work just fine so long as you have the proper modules installed. The basic net is much more customizable and can be used without the need for many of the other modules, just numpy and json. I've been trying to work on a version that doesn't use any outside modules, but it would be a lot slower and the code is much more complicated to write.
 
+To train the network, simply use the train function with your own datasets as well as some parameters such as learning rate, batch size, and epochs.
+
 Important note: The basic net comes with a save/load system by default that will try to read a text file for the weights and biases. If you do not have a text file set up, simply make one in the project location and name it properly, or just remove the part of the code that attempts to read the file.
