@@ -7,3 +7,6 @@ Feel free to try it out yourself! The code for the handwritten digits was made i
 To train the network, simply use the train function with your own datasets as well as some parameters such as learning rate, batch size, and epochs.
 
 Important note: The basic net comes with a save/load system by default that will try to read a text file for the weights and biases. If you do not have a text file set up, simply make one in the project location and name it properly, or just remove the part of the code that attempts to read the file.
+
+# Contribution
+You can share any code improvements or models by contributing! If you want to add your own trained model, you can make a folder with the weights and biases and/or python code. I'm not sure what will become of this project, but contribution is always welcome :)
