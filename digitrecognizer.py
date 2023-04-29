@@ -1,9 +1,8 @@
-import random
-
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 import json
+
 
 def find_highest(arr):
     highest = 0
@@ -14,17 +13,27 @@ def find_highest(arr):
             index = i
     return [index, round(highest, 3)]
 
+
 class CustomNeuralNetwork:
-    def __init__(self, layer_sizes):
+    def __init__(self, layer_sizes, weights=[], biases=[], save_file="nn_weights_biases.txt"):
         self.layer_sizes = layer_sizes
         self.weights = []
         self.biases = []
         self.activations = []
+        self.save_file = save_file
+        if not weights:
+            # Initialize weights and biases
+            for i in range(len(layer_sizes) - 1):
+                self.weights.append(np.random.randn(layer_sizes[i], layer_sizes[i + 1]))
 
-        # Initialize weights and biases
-        for i in range(len(layer_sizes) - 1):
-            self.weights.append(np.random.randn(layer_sizes[i], layer_sizes[i + 1]))
-            self.biases.append(np.zeros(layer_sizes[i + 1]))
+        else:
+            self.weights = weights
+
+        if not biases:
+            for i in range(len(layer_sizes) - 1):
+                self.biases.append(np.zeros(layer_sizes[i + 1]))
+        else:
+            self.biases = biases
 
     def serialize(self):
         weights_serialized = [w.tolist() for w in self.weights]
@@ -109,7 +118,6 @@ class CustomNeuralNetwork:
                 self.backpropagate(X_batch, y_batch, learning_rate)
 
 
-
 # Training parameters
 learning_rate = 0.01
 epochs = 10000
@@ -136,9 +144,10 @@ nn = CustomNeuralNetwork(layer_sizes)
 # if neural net loading doesn't work, remove this
 try:
     nn.load_from_file("nn_weights_biases.txt")
+    nn.forward(x_test)
 except:
     print("network could not be read from file")
-nn.train(x_train, y_train, batch_size=10, learning_rate=0.05, epochs=25)
+# -+-nn.train(x_train, y_train, batch_size=10, learning_rate=0.05, epochs=25)
 
 
 # Test the trained network
@@ -146,7 +155,6 @@ y_pred = nn.forward(x_test)
 y_true = np.argmax(y_test, axis=1)
 accuracy = np.mean(y_true == y_pred)
 print(f"Accuracy: {accuracy * 100:.2f}%")
-
 
 
 # Function to display the images and their labels
@@ -167,3 +175,4 @@ x_test_reshaped = x_test.reshape(x_test.shape[0], 28, 28)
 
 # Display the images along with their true and predicted labels
 display_images(x_test_reshaped, y_true, y_pred)
+
