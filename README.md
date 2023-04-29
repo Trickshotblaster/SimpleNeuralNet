@@ -2,7 +2,7 @@
 A simple neural network model with backpropagation. There is a file for recognizing handwritten digits using the MNIST dataset, as well as a basic file that does not use tensorflow and is more customizable for any task.
 
 # Use
-Feel free to try it out yourself! The code for the handwritten digits was made in pycharm, so it has not been tested with other editors, but the code should work just fine so long as you have the proper modules installed. The basic net is much more customizable and can be used without the need for many of the other modules, just numpy and json. I've been trying to work on a version that doesn't use any outside modules, but it would be a lot slower and the code is much more complicated to write.
+Feel free to try it out yourself! The code for the handwritten digits was made in pycharm, so it has not been tested with other editors, but the code should work just fine so long as you have the proper modules installed. The basic net is much more customizable and can be used without the need for many of the other modules, just numpy and json. I've been trying to work on a version that doesn't use any outside modules, but it would be a lot slower and the code is much more complicated to write. Finally, the "module.py" file also has the functionality of the CustomNeuralNetwork class, and can be used like any other module in a project if you want the most versatile version of the network.
 
 To train the network, simply use the train function with your own datasets as well as some parameters such as learning rate, batch size, and epochs.
 
