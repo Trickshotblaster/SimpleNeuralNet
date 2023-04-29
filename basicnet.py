@@ -1,9 +1,6 @@
-import random
-
 import numpy as np
-
-
 import json
+
 
 def find_highest(arr):
     highest = 0
@@ -14,17 +11,27 @@ def find_highest(arr):
             index = i
     return [index, round(highest, 3)]
 
+
 class CustomNeuralNetwork:
-    def __init__(self, layer_sizes):
+    def __init__(self, layer_sizes, weights=[], biases=[], save_file="nn_weights_biases.txt"):
         self.layer_sizes = layer_sizes
         self.weights = []
         self.biases = []
         self.activations = []
+        self.save_file = save_file
+        if not weights:
+            # Initialize weights and biases
+            for i in range(len(layer_sizes) - 1):
+                self.weights.append(np.random.randn(layer_sizes[i], layer_sizes[i + 1]))
 
-        # Initialize weights and biases
-        for i in range(len(layer_sizes) - 1):
-            self.weights.append(np.random.randn(layer_sizes[i], layer_sizes[i + 1]))
-            self.biases.append(np.zeros(layer_sizes[i + 1]))
+        else:
+            self.weights = weights
+
+        if not biases:
+            for i in range(len(layer_sizes) - 1):
+                self.biases.append(np.zeros(layer_sizes[i + 1]))
+        else:
+            self.biases = biases
 
     def serialize(self):
         weights_serialized = [w.tolist() for w in self.weights]
@@ -109,15 +116,12 @@ class CustomNeuralNetwork:
                 self.backpropagate(X_batch, y_batch, learning_rate)
 
 
-
 # Training parameters
 learning_rate = 0.01
 epochs = 10000
 
-# Load the MNIST dataset
-
-(x_train, y_train), (x_test, y_test) = (np.array([[1], [3], [5], [7]]), np.array([[0], [0], [0], [0]])), (np.array([[2], [4], [6], [8]]), np.array([[0], [0], [0], [0]]))
-
+(x_train, y_train), (x_test, y_test) = (np.array([[1], [3], [5], [7]]), np.array([[0], [0], [0], [0]])), (
+np.array([[2], [4], [6], [8]]), np.array([[0], [0], [0], [0]]))
 
 # Reshape the input data
 x_train = x_train.reshape(x_train.shape[0], -1)
@@ -128,7 +132,8 @@ layer_sizes = [1, 1]
 nn = CustomNeuralNetwork(layer_sizes)
 # if neural net loading doesn't work, remove this (you need a text file in your project to store the weights and biases)
 try:
-    nn.load_from_file("nn_weights_biases.txt") #rename to whatever your text file is
+    nn.load_from_file("nn_weights_biases.txt")  # rename to whatever your text file is
+    nn.forward(x_test)
 except:
     print("network could not be read from file")
 
