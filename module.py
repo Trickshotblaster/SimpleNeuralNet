@@ -69,7 +69,6 @@ class CustomNeuralNetwork:
 
         # Calculate output layer error
         error = output - y
-        print(np.average(error))
         delta = error * self.sigmoid_derivative(output)
         deltas.append(delta)
 
