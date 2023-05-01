@@ -19,7 +19,7 @@ class CustomNeuralNetwork:
         self.biases = []
         self.activations = []
         self.save_file = save_file
-        if not weights:
+        if weights == []:
             # Initialize weights and biases
             for i in range(len(layer_sizes) - 1):
                 self.weights.append(np.random.randn(layer_sizes[i], layer_sizes[i + 1]))
@@ -27,7 +27,7 @@ class CustomNeuralNetwork:
         else:
             self.weights = weights
 
-        if not biases:
+        if biases == []:
             for i in range(len(layer_sizes) - 1):
                 self.biases.append(np.zeros(layer_sizes[i + 1]))
         else:
