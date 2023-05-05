@@ -1,24 +1,29 @@
 import numpy as np
 import json
 
+activation_dict = {
+    'sigmoid': lambda x: 1 / (np.exp(-x)),
+    'tanh': np.tanh,
+    'relu': lambda x: np.maximum(0, x)
+}
 
-def find_highest(arr):
-    highest = 0
-    index = 0
-    for i, v in enumerate(arr):
-        if v > highest:
-            highest = v
-            index = i
-    return [index, round(highest, 3)]
+derivative_dict = {
+    'sigmoid': lambda x: x * (1 - x),
+    'tanh': lambda x: 1 - np.tanh(x) ** 2,
+    'relu': lambda x: np.where(x > 0, 1, 0)
+}
 
 
 class CustomNeuralNetwork:
-    def __init__(self, layer_sizes, weights=[], biases=[], save_file="nn_weights_biases.txt"):
+    def __init__(self, layer_sizes, weights=[], biases=[], activation_function='sigmoid',
+                 save_file="nn_weights_biases.txt"):
         self.layer_sizes = layer_sizes
         self.weights = []
         self.biases = []
         self.activations = []
         self.save_file = save_file
+        self.activation_function = activation_dict[activation_function]
+        self.derivative_function = derivative_dict[activation_function]
         if weights == []:
             # Initialize weights and biases
             for i in range(len(layer_sizes) - 1):
@@ -52,15 +57,14 @@ class CustomNeuralNetwork:
         data = json.loads(serialized_data)
         weights = [np.array(w) for w in data["weights"]]
         biases = [np.array(b) for b in data["biases"]]
-        layer_sizes = [w.shape[0] for w in weights] + [weights[-1].shape[1]]
         self.weights = weights
         self.biases = biases
 
-    def sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))
+    def activation(self, x):
+        return self.activation_function(x)
 
-    def sigmoid_derivative(self, x):
-        return x * (1 - x)
+    def activation_derivative(self, x):
+        return self.derivative_function(x)
 
     def forward(self, X):
         layer_input = X
@@ -68,7 +72,8 @@ class CustomNeuralNetwork:
 
         for i in range(len(self.layer_sizes) - 1):
             layer_output = np.dot(layer_input, self.weights[i]) + self.biases[i]
-            layer_input = self.sigmoid(layer_output)
+
+            layer_input = self.activation(layer_output)
             self.activations.append(layer_input)
 
         return layer_input
@@ -78,15 +83,14 @@ class CustomNeuralNetwork:
         deltas = []
 
         # Calculate output layer error
-        error = output - y
-        print(np.average(error))
-        delta = error * self.sigmoid_derivative(output)
+        error = (output - y) ** 2
+        delta = error * self.activation_derivative(output)
         deltas.append(delta)
 
         # Calculate hidden layer errors
         for i in reversed(range(len(self.weights) - 1)):
             error = np.dot(delta, self.weights[i + 1].T)
-            delta = error * self.sigmoid_derivative(self.activations[i])
+            delta = error * self.activation_derivative(self.activations[i])
             deltas.append(delta)
 
         # Reverse deltas to match layer order
@@ -100,7 +104,7 @@ class CustomNeuralNetwork:
 
     def train(self, X_train, y_train, batch_size, learning_rate, epochs):
         for epoch in range(epochs):
-            self.save_to_file("nn_weights_biases.txt")
+            self.save_to_file(self.save_file)
             # Shuffle the dataset
             indices = np.arange(X_train.shape[0])
             np.random.shuffle(indices)
@@ -114,6 +118,7 @@ class CustomNeuralNetwork:
 
                 # Update the network weights and biases using the mini-batch
                 self.backpropagate(X_batch, y_batch, learning_rate)
+
 
 
 # Training parameters
@@ -138,12 +143,4 @@ except:
     print("network could not be read from file")
 
 nn.train(x_train, y_train, batch_size=10, learning_rate=0.01, epochs=100)
-
-
-# Test the trained network
-y_pred = nn.forward(x_test)
-y_true = np.argmax(y_test, axis=1)
-accuracy = np.mean(y_true == y_pred)
-print(f"Accuracy: {accuracy * 100:.2f}%")
-
-print(nn.forward([70]))
+print(nn.forward([100]))
