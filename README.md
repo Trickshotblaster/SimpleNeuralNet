@@ -7,9 +7,9 @@ Recognizing handwritten digits with about 97% accuracy (It really struggles with
 # Use
 Feel free to try it out yourself! The code for the handwritten digits was made in pycharm, so it has not been tested with other editors, but the code should work just fine so long as you have the proper modules installed. The basic net is much more customizable and can be used without the need for many of the other modules, just numpy and json. I've been trying to work on a version that doesn't use any outside modules, but it would be a lot slower and the code is much more complicated to write. Finally, the "module.py" file also has the functionality of the CustomNeuralNetwork class, and can be used like any other module in a project if you want the most versatile version of the network.
 
-To train the network, simply use the train function with your own datasets as well as some parameters such as learning rate, batch size, and epochs.
+To train the network using the module, simply use the train function with your own datasets as well as some parameters such as learning rate, batch size, epochs, and activation function. Try referringcto the basicnet.py file if you need an exmaple of doing this.
 
-Important note: The basic net comes with a save/load system by default that will try to read a text file for the weights and biases. If you do not have a text file set up, simply make one in the project location and name it properly, or just remove the part of the code that attempts to read the file.
+!!!Important note!!!: The basic net comes with a save/load system by default that will try to read a text file for the weights and biases. If you do not have a text file set up, simply make one in the project location and name it properly, or just remove the part of the code that attempts to read the file.
 
 # Contribution
 You can share any code improvements or models by contributing! If you want to add your own trained model, you can make a folder with the weights and biases and/or python code. I'm not sure what will become of this project, but contribution is always welcome :)
